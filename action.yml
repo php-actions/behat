@@ -1,0 +1,19 @@
+name: Behat (php-actions)
+description: Run your Behat tests in your Github Actions.
+
+inputs:
+  config:
+    description: Configuration file location
+    required: false
+    default: test/behat/behat.yml
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - -c
+    - ${{ inputs.config }}
+
+branding:
+  icon: 'check-square'
+  color: 'purple'
