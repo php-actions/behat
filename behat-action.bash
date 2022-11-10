@@ -87,7 +87,7 @@ done <<<$(env)
 
 # When Behat is running in PHP >= 8.1, there are a lot of deprecation notices.
 # We need to temporarily hide these messages.
-echo "error_reporting = E_ALL^E_DEPRECATED" > behat.ini
+echo "error_reporting = E_ALL & ~E_DEPRECATED" > behat.ini
 
 echo "Command: " "${command_string[@]}" >> output.log 2>&1
 
