@@ -16,9 +16,9 @@ fi
 chmod +x "$phar_path"
 command_string=("php -d'error_reporting=E_ALL^E_DEPRECATED' behat")
 
-if [ -n "$ACTION_CONFIGURATION" ]
+if [ -n "$ACTION_CONFIG" ]
 then
-	command_string+=(--config="$ACTION_CONFIGURATION")
+	command_string+=(--config="$ACTION_CONFIG")
 fi
 
 if [ -n "$ACTION_SUITE" ]
@@ -61,7 +61,7 @@ then
 	command_string+=($ACTION_ARGS)
 fi
 
-command_strong+=(--no-interaction)
+command_string+=(--no-interaction)
 
 if [ -n "$ACTION_PATHS" ]
 then
