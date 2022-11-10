@@ -14,7 +14,7 @@ else
 fi
 
 chmod +x "$phar_path"
-command_string=("php -d'error_reporting=E_ALL^E_DEPRECATED' /usr/local/bin/behat")
+command_string=("/usr/bin/php -d'error_reporting=E_ALL^E_DEPRECATED' /usr/local/bin/behat")
 
 if [ -n "$ACTION_CONFIG" ]
 then
