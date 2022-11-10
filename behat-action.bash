@@ -14,7 +14,7 @@ else
 fi
 
 chmod +x "$phar_path"
-command_string=("behat")
+command_string=("php -d'error_reporting=E_ALL^E_DEPRECATED' behat")
 
 if [ -n "$ACTION_CONFIGURATION" ]
 then
@@ -60,6 +60,8 @@ if [ -n "$ACTION_ARGS" ]
 then
 	command_string+=($ACTION_ARGS)
 fi
+
+command_strong+=(--no-interaction)
 
 if [ -n "$ACTION_PATHS" ]
 then
