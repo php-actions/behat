@@ -2,17 +2,100 @@ name: Behat (php-actions)
 description: Run your Behat tests in your Github Actions.
 
 inputs:
+  version:
+    description: What version of Behat to use
+    default: latest
+    required: false
+
+  php_version:
+    description: What version of PHP to use
+    default: latest
+    required: false
+
+  php_extensions:
+    description: Space separated list of extensions to configure with the PHP build
+    required: false
+
+  vendored_behat_path:
+    description: Path to a vendored behat binary
+    required: false
+
   config:
     description: Configuration file location
     required: false
-    default: test/behat/behat.yml
+
+  paths:
+    description: Optional path(s) to exclude
+    required: false
+
+  suite:
+    description: Only execute a specific suite
+    required: false
+
+  format:
+    description: How to format tests output (pretty/progress/junit)
+    required: false
+    default: pretty
+
+  out:
+    description: Write format output to a file/directory instead of STDOUT
+    required: false
+
+  name:
+    description: Only executeCall the feature elements which match part of the given name or regex
+    required: false
+
+  tags:
+    description: Only executeCall the features or scenarios with tags matching tag filter expression
+    required: false
+
+  role:
+    description: Only executeCall the features with actor role matching a wildcard
+    required: false
+
+  story-syntax:
+    description: Print *.feature example
+    required: false
+
+  definitions:
+    description: Print all available step definitions (l to list, i to show extended info, 'needle' to find specific definitions)
+    required: false
+
+  memory_limit:
+    description: Memory limit for tests
+    required: false
+
+  args:
+    description: Extra arguments to pass to the behat binary
+    required: false
 
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - -c
-    - ${{ inputs.config }}
+  using: "composite"
+  steps:
+    - env:
+        ACTION_TOKEN: ${{ github.token }}
+        ACTION_VERSION: ${{ inputs.version }}
+        ACTION_PHP_VERSION: ${{ inputs.php_version }}
+        ACTION_BEHAT_PATH: ${{ inputs.vendored_behat_path }}
+        ACTION_PHP_EXTENSIONS: ${{ inputs.php_extensions }}
+        ACTION_CONFIG: ${{ inputs.config }}
+        ACTION_PATHS: ${{ inputs.paths }}
+        ACTION_SUITE: ${{ inputs.suite }}
+        ACTION_FORMAT: ${{ inputs.format }}
+        ACTION_OUT: ${{ inputs.out }}
+        ACTION_NAME: ${{ inputs.name }}
+        ACTION_TAGS: ${{ inputs.tags }}
+        ACTION_ROLE: ${{ inputs.role }}
+        ACTION_STORY_SYNTAX: ${{ inputs.story-syntax }}
+        ACTION_DEFINITIONS: ${{ inputs.definitions }}
+        ACTION_MEMORY_LIMIT: ${{ inputs.memory_limit }}
+        ACTION_ARGS: ${{ inputs.args }}
+      id: behat_run
+      run: |
+        set -e
+        bash <(curl -s https://raw.githubusercontent.com/php-actions/php-build/cee5b9fa9fbc4c888e7a62bbb7b8eade18e3c56b/php-build.bash) behat
+        ${{ github.action_path }}/behat-action.bash || cat ${{ github.workspace }}/output.log
+      shell: bash
 
 branding:
   icon: 'check-square'

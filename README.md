@@ -8,4 +8,4 @@ Behat is an open source Behavior Driven Development framework for PHP 5.3+. What
 Usage
 -----
 
-// TODO: I'm still working out how to run a headless Chrome within Github's action runner. 
+// TODO: WIP
