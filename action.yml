@@ -53,10 +53,6 @@ inputs:
     description: Only executeCall the features with actor role matching a wildcard
     required: false
 
-  story-syntax:
-    description: Print *.feature example
-    required: false
-
   definitions:
     description: Print all available step definitions (l to list, i to show extended info, 'needle' to find specific definitions)
     required: false
@@ -86,7 +82,6 @@ runs:
         ACTION_NAME: ${{ inputs.name }}
         ACTION_TAGS: ${{ inputs.tags }}
         ACTION_ROLE: ${{ inputs.role }}
-        ACTION_STORY_SYNTAX: ${{ inputs.story-syntax }}
         ACTION_DEFINITIONS: ${{ inputs.definitions }}
         ACTION_MEMORY_LIMIT: ${{ inputs.memory_limit }}
         ACTION_ARGS: ${{ inputs.args }}
