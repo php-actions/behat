@@ -85,10 +85,15 @@ do
 	fi
 done <<<$(env)
 
+# When Behat is running in PHP >= 8.1, there are a lot of deprecation notices.
+# We need to temporarily hide these messages.
+echo "error_reporting = E_ALL^E_DEPRECATED" > behat.ini
+
 echo "Command: " "${command_string[@]}" >> output.log 2>&1
 
 docker run --rm \
 	--volume "$phar_path":/usr/local/bin/behat \
+	--volume "behat.ini":/usr/local/etc/php/conf.d/behat.ini \
 	--volume "${GITHUB_WORKSPACE}":/app \
 	--workdir /app \
 	--env-file ./DOCKER_ENV \
