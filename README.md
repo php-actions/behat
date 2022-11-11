@@ -47,7 +47,21 @@ Inputs
 
 The following configuration options are available:
 
-+ ???
++ `version` What version of Behat to use (default: latest)
++ `php_version` What version of PHP to use (default: latest)
++ `php_extensions` Space separated list of extensions to configure with the PHP build
++ `vendored_behat_path` Path to a vendored behat binary
++ `config` Configuration file location
++ `paths` Optional path(s) to exclude
++ `suite` Only execute a specific suite
++ `format` How to format tests output (pretty/progress/junit)
++ `out` Write format output to a file/directory instead of STDOUT
++ `name` Only executeCall the feature elements which match part of the given name or regex
++ `tags` Only executeCall the features or scenarios with tags matching tag filter expression
++ `role` Only executeCall the features with actor role matching a wildcard
++ `definitions` Print all available step definitions (l to list, i to show extended info, 'needle' to find specific definitions)
++ `memory_limit` Memory limit for tests
++ `args` Extra arguments to pass to the behat binary
 
 The syntax for passing in custom input is the following: 
 
