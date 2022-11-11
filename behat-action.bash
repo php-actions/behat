@@ -62,6 +62,7 @@ then
 fi
 
 command_string+=(--no-interaction)
+command_string+=(--colors)
 
 if [ -n "$ACTION_PATHS" ]
 then
