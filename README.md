@@ -6,8 +6,11 @@ Run your Behat tests in your Github Actions.
 Behat is an open source Behavior Driven Development framework. What’s behavior driven development, you ask? It's a way to develop software through a constant communication with stakeholders in form of examples; examples of how this software should help them, and you, to achieve your goals.
 
 > Given I am on "https://github.com/php-actions/behat"
+>
 > When I press "Star this repository"
+>
 > Then I should be a stargazer of "php-actions/behat"
+>
 > And I should see "Unstar this repository"
 
 Usage
