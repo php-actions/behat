@@ -1,7 +1,7 @@
 <img src="http://159.65.210.101/php-actions.png" align="right" alt="PHP Actions for Github" />
 
-Run your Behat tests in your Github Actions.
-============================================
+Run Behat tests in Github Actions.
+==================================
 
 Behat is an open source Behavior Driven Development framework. What’s behavior driven development, you ask? It's a way to develop software through a constant communication with stakeholders in form of examples; examples of how this software should help them, and you, to achieve your goals.
 
