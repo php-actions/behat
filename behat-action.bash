@@ -4,17 +4,34 @@ github_action_path=$(dirname "$0")
 docker_tag=$(cat ./docker_tag)
 echo "Docker tag: $docker_tag" >> output.log 2>&1
 
+docker_run_args=(
+	--rm
+	--volume "${GITHUB_WORKSPACE}":/app
+	--workdir /app
+	--env-file ./DOCKER_ENV
+	--network host
+)
+
+command_string=()
+
+if [ -n "$ACTION_MEMORY_LIMIT" ]
+then
+	command_string+=(php -d "memory_limit=$ACTION_MEMORY_LIMIT")
+fi
+
 if [ -z "$ACTION_BEHAT_PATH" ]
 then
 	phar_url="https://www.getrelease.download/Behat/Behat/$ACTION_VERSION/phar"
 	phar_path="${github_action_path}/behat.phar"
 	curl --silent -H "User-agent: cURL (https://github.com/php-actions)" -L "$phar_url" > "$phar_path"
+	chmod +x "$phar_path"
+	behat_command="/usr/local/bin/behat"
+	docker_run_args+=(--volume "$phar_path":/usr/local/bin/behat)
 else
-	phar_path="${GITHUB_WORKSPACE}/$ACTION_BEHAT_PATH"
+	behat_command="/app/$ACTION_BEHAT_PATH"
 fi
 
-chmod +x "$phar_path"
-command_string=("behat")
+command_string+=("$behat_command")
 
 if [ -n "$ACTION_CONFIG" ]
 then
@@ -69,6 +86,8 @@ then
 	command_string+=("$ACTION_PATHS")
 fi
 
+echo "Command: " "${command_string[@]}" >> output.log 2>&1
+
 dockerKeys=()
 while IFS= read -r line
 do
@@ -86,12 +105,6 @@ do
 	fi
 done <<<$(env)
 
-echo "Command: " "${command_string[@]}" >> output.log 2>&1
-
-docker run --rm \
-	--volume "$phar_path":/usr/local/bin/behat \
-	--volume "${GITHUB_WORKSPACE}":/app \
-	--workdir /app \
-	--env-file ./DOCKER_ENV \
-	--network host \
+docker run \
+	"${docker_run_args[@]}" \
 	${docker_tag} "${command_string[@]}"

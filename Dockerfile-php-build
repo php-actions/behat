@@ -1,0 +1,3 @@
+FROM php:8.5-cli-alpine
+RUN apk add --update --no-cache bash coreutils git make openssh patch unzip zip
+ADD ./php-build.ini /usr/local/etc/php/conf.d
