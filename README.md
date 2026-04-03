@@ -54,6 +54,14 @@ The following configuration options are available:
 + `php_version` What version of PHP to use (default: latest)
 + `php_extensions` Space separated list of extensions to configure with the PHP build
 + `vendored_behat_path` Path to a vendored behat binary
++ `app_command` Command to run in a temporary app server container before executing Behat
++ `app_image` Docker image to use for the temporary app server container
++ `app_port` Host port exposed by the temporary app server container
++ `chrome_image` Docker image to use for the temporary Chrome container
++ `chrome_port` Host port exposed by the temporary Chrome DevTools endpoint
++ `base_url` Override `base_url` inside the Behat config used by the action
++ `chrome_api_url` Override Chrome `api_url` inside the Behat config used by the action
++ `startup_timeout` Number of seconds to wait for temporary services to become ready
 + `config` Configuration file location
 + `paths` Optional path(s) to exclude
 + `suite` Only execute a specific suite
@@ -78,7 +86,8 @@ jobs:
     - name: Behat tests
       uses: php-actions/behat@v1
       with:
-        config: path/to/behat.yml
+        vendored_behat_path: vendor/bin/behat
+        app_command: php -S 0.0.0.0:8000 -t /app/public
         memory_limit: 256M
 ```
 

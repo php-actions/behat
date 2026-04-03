@@ -20,6 +20,42 @@ inputs:
     description: Path to a vendored behat binary
     required: false
 
+  app_command:
+    description: Command to run in a temporary app server container before executing Behat
+    required: false
+
+  app_image:
+    description: Docker image to use for the temporary app server container
+    required: false
+
+  app_port:
+    description: Host port exposed by the temporary app server container
+    required: false
+    default: "8000"
+
+  chrome_image:
+    description: Docker image to use for the temporary Chrome container
+    required: false
+    default: registry.gitlab.com/behat-chrome/docker-chrome-headless:latest
+
+  chrome_port:
+    description: Host port exposed by the temporary Chrome DevTools endpoint
+    required: false
+    default: "9222"
+
+  base_url:
+    description: Override base_url inside the Behat config used by the action
+    required: false
+
+  chrome_api_url:
+    description: Override Chrome api_url inside the Behat config used by the action
+    required: false
+
+  startup_timeout:
+    description: Number of seconds to wait for temporary services to become ready
+    required: false
+    default: "20"
+
   config:
     description: Configuration file location
     required: false
@@ -73,6 +109,14 @@ runs:
         ACTION_VERSION: ${{ inputs.version }}
         ACTION_PHP_VERSION: ${{ inputs.php_version }}
         ACTION_BEHAT_PATH: ${{ inputs.vendored_behat_path }}
+        ACTION_APP_COMMAND: ${{ inputs.app_command }}
+        ACTION_APP_IMAGE: ${{ inputs.app_image }}
+        ACTION_APP_PORT: ${{ inputs.app_port }}
+        ACTION_CHROME_IMAGE: ${{ inputs.chrome_image }}
+        ACTION_CHROME_PORT: ${{ inputs.chrome_port }}
+        ACTION_BASE_URL: ${{ inputs.base_url }}
+        ACTION_CHROME_API_URL: ${{ inputs.chrome_api_url }}
+        ACTION_STARTUP_TIMEOUT: ${{ inputs.startup_timeout }}
         ACTION_PHP_EXTENSIONS: ${{ inputs.php_extensions }}
         ACTION_CONFIG: ${{ inputs.config }}
         ACTION_PATHS: ${{ inputs.paths }}
