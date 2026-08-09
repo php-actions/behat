@@ -52,6 +52,7 @@ resolve_config_path() {
 wait_for_url() {
 	local url="$1"
 	local timeout="$2"
+	local container_name="${3:-}"
 	local max_attempts=$((timeout * 5))
 
 	for attempt in $(seq 1 "$max_attempts")
@@ -60,10 +61,20 @@ wait_for_url() {
 		then
 			return 0
 		fi
+		if [ -n "$container_name" ] && [ "$(docker inspect --format '{{.State.Running}}' "$container_name" 2>/dev/null)" = "false" ]
+		then
+			echo "Container $container_name stopped before $url became available" >&2
+			docker logs "$container_name" >&2
+			return 1
+		fi
 		sleep 0.2
 	done
 
 	echo "Timed out waiting for $url" >&2
+	if [ -n "$container_name" ]
+	then
+		docker logs "$container_name" >&2
+	fi
 	return 1
 }
 
@@ -130,14 +141,16 @@ then
 	app_container_name="php-actions-behat-app-${GITHUB_RUN_ID:-$$}-${RANDOM}"
 	chrome_container_name="php-actions-behat-chrome-${GITHUB_RUN_ID:-$$}-${RANDOM}"
 
-	docker run -d --rm \
+	docker run -d \
 		--name "$app_container_name" \
 		--network host \
 		--volume "${GITHUB_WORKSPACE}":/app \
 		--workdir /app \
 		"$app_image" sh -lc "$ACTION_APP_COMMAND" >/dev/null
 
-	docker run -d --rm \
+	wait_for_url "$base_url" "$startup_timeout" "$app_container_name"
+
+	docker run -d \
 		--name "$chrome_container_name" \
 		--network host \
 		"${ACTION_CHROME_IMAGE:-registry.gitlab.com/behat-chrome/docker-chrome-headless:latest}" \
@@ -150,8 +163,7 @@ then
 		--remote-debugging-address=0.0.0.0 \
 		--remote-debugging-port="$chrome_port" >/dev/null
 
-	wait_for_url "$base_url" "$startup_timeout"
-	wait_for_url "${chrome_api_url}/json/version" "$startup_timeout"
+	wait_for_url "${chrome_api_url}/json/version" "$startup_timeout" "$chrome_container_name"
 
 	ACTION_BASE_URL="$base_url"
 	ACTION_CHROME_API_URL="$chrome_api_url"
