@@ -128,7 +128,7 @@ then
 	app_port="${ACTION_APP_PORT:-8000}"
 	chrome_port="${ACTION_CHROME_PORT:-9222}"
 	startup_timeout="${ACTION_STARTUP_TIMEOUT:-20}"
-	base_url="${ACTION_BASE_URL:-http://127.0.0.1:${app_port}/}"
+	base_url="${ACTION_BASE_URL:-http://127.0.0.1:${app_port}}"
 	chrome_api_url="${ACTION_CHROME_API_URL:-http://127.0.0.1:${chrome_port}}"
 
 	if [ -z "${ACTION_APP_IMAGE:-}" ]
