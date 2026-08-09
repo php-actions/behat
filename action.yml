@@ -25,7 +25,7 @@ inputs:
     required: false
 
   app_image:
-    description: Docker image to use for the temporary app server container
+    description: Docker image for the app server; defaults to the PHP image built with php_extensions
     required: false
 
   app_port:

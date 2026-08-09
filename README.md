@@ -55,7 +55,7 @@ The following configuration options are available:
 + `php_extensions` Space separated list of extensions to configure with the PHP build
 + `vendored_behat_path` Path to a vendored behat binary
 + `app_command` Command to run in a temporary app server container before executing Behat
-+ `app_image` Docker image to use for the temporary app server container
++ `app_image` Optional Docker image override for the temporary app server container
 + `app_port` Host port exposed by the temporary app server container
 + `chrome_image` Docker image to use for the temporary Chrome container
 + `chrome_port` Host port exposed by the temporary Chrome DevTools endpoint
@@ -101,6 +101,11 @@ It's possible to run any version of Behaty under any version of PHP, with any PH
 + `version` - the version number of Behat to run, e.g. `3` or `3.11.0` (default: latest)
 + `php_version` - the version number of PHP to use, e.g. `7.4` (default: latest)
 + `php_extensions` - a space-separated list of extensions to install using [php-build][php-build], e.g. `xdebug mbstring` (default: N/A)
+
+When `app_command` is provided, the temporary application server uses this
+same PHP image by default. Extensions listed in `php_extensions` are therefore
+available to both Behat and the application under test. Set `app_image` only
+when the application requires a different image.
 
 Please note the version number specified within your Action configuration must match your `composer.json` major version number. For example, if your composer.json requires `behat/behat 3.11.0`, you must use the version: `3.11.0` input, as major versions of PHPBehat are incompatible with each other.
 

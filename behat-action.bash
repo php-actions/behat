@@ -122,12 +122,7 @@ then
 
 	if [ -z "${ACTION_APP_IMAGE:-}" ]
 	then
-		if [ "$ACTION_PHP_VERSION" = "latest" ]
-		then
-			app_image="php:cli"
-		else
-			app_image="php:${ACTION_PHP_VERSION}-cli"
-		fi
+		app_image="$docker_tag"
 	else
 		app_image="$ACTION_APP_IMAGE"
 	fi
@@ -160,6 +155,8 @@ then
 
 	ACTION_BASE_URL="$base_url"
 	ACTION_CHROME_API_URL="$chrome_api_url"
+	export BEHAT_BASE_URL="$base_url"
+	export BEHAT_CHROME_API_URL="$chrome_api_url"
 fi
 
 if [ -n "${ACTION_BASE_URL:-}" ] || [ -n "${ACTION_CHROME_API_URL:-}" ]
