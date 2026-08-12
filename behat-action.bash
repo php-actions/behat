@@ -18,6 +18,14 @@ chrome_container_name=""
 generated_config_path=""
 
 cleanup() {
+	local exit_code=$?
+
+	if [ "$exit_code" -ne 0 ] && [ -n "$app_container_name" ]
+	then
+		echo "Application container logs:" >&2
+		docker logs "$app_container_name" >&2 || true
+	fi
+
 	if [ -n "$generated_config_path" ] && [ -f "$generated_config_path" ]
 	then
 		rm -f "$generated_config_path"
